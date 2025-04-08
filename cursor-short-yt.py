@@ -154,8 +154,8 @@ class Config:
     LOG_MAX_SIZE = int(os.environ.get("LOG_MAX_SIZE", str(5 * 1024 * 1024)))
     LOG_BACKUP_COUNT = int(os.environ.get("LOG_BACKUP_COUNT", "5"))
     DATABASE_URL = os.environ.get("DATABASE_URL", "sqlite:///bot_data.db")
-    AUTH_CALLBACK_URL = os.environ.get("AUTH_CALLBACK_URL", "https://bot.example.com/oauth2callback")
-    PORT = int(os.environ.get("PORT", "8080"))
+    AUTH_CALLBACK_URL = os.environ.get("AUTH_CALLBACK_URL", "https://your-repl-name.your-username.repl.co/oauth2callback")
+    PORT = int(os.environ.get("PORT", "3000"))
     # All available reactions (the thumbs-up is always included)
     ALL_REACTIONS = ['👍', '😂', '😊', '😎', '😘', '❤️', '🤯', '💀', '👻', '🥶', '😼', '🔥', '✨', '🐐']
     DEFAULT_CAPTION_TEMPLATE = "{title}\n\n👁 Views: {view_count}\n👍 Likes: {like_count}\n⏱ Duration: {duration}\n📅 Uploaded: {upload_date}\n🎥 Quality: {quality} {fps}fps\n💾 Size: {size}\n\n🔗 Original: [Link]({url})"
@@ -269,7 +269,7 @@ class UserStats:
                 session.close()
 
     def check_limit(self, user_id):
-        user_id = str(user_id)
+            user_id = str(user_id)
         session = Session()
         try:
             # Count today's downloads
@@ -321,7 +321,7 @@ class UserStats:
             session.close()
 
     def get_gdrive_preference(self, user_id):
-        user_id = str(user_id)
+            user_id = str(user_id)
         session = Session()
         try:
             user = session.query(UserModel).filter_by(user_id=user_id).first()
@@ -335,7 +335,7 @@ class UserStats:
             session.close()
 
     def toggle_gdrive_preference(self, user_id):
-        user_id = str(user_id)
+            user_id = str(user_id)
         session = Session()
         try:
             user = session.query(UserModel).filter_by(user_id=user_id).first()
@@ -408,7 +408,7 @@ class GoogleDriveManager:
                     token.token_data = credentials.to_json()
                     token.created_at = datetime.now()
                     token.expires_at = datetime.now() + timedelta(seconds=credentials.expiry)
-                else:
+            else:
                     token = TokenModel(
                         user_id=str(user_id),
                         token_data=credentials.to_json(),
@@ -485,7 +485,7 @@ class GoogleDriveManager:
                 token_entry.expires_at = datetime.now() + timedelta(seconds=creds.expiry)
                 session.commit()
             
-            return build('drive', 'v3', credentials=creds, cache_discovery=False)
+        return build('drive', 'v3', credentials=creds, cache_discovery=False)
         except Exception as e:
             logging.error(f"Error getting drive service for user {user_id}: {e}")
             return None
@@ -608,18 +608,18 @@ class UserPreferences:
             logging.error(f"Error getting user preferences: {e}")
             # Return defaults on error
             return {
-                "quality": "high",
-                "gdrive_enabled": True,
-                "remove_watermark": False,
-                "auto_audio": False,
-                "caption_template": Config.DEFAULT_CAPTION_TEMPLATE,
-                "last_used": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            }
+                    "quality": "high",
+                    "gdrive_enabled": True,
+                    "remove_watermark": False,
+                    "auto_audio": False,
+                    "caption_template": Config.DEFAULT_CAPTION_TEMPLATE,
+                    "last_used": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                }
         finally:
             session.close()
 
     def update_preference(self, user_id, key, value):
-        user_id = str(user_id)
+            user_id = str(user_id)
         session = Session()
         try:
             user = session.query(UserModel).filter_by(user_id=user_id).first()
@@ -633,7 +633,7 @@ class UserPreferences:
                 setattr(user, key, value)
                 user.last_used = datetime.now()
                 session.commit()
-                return value
+            return value
             else:
                 logging.warning(f"Attempted to update unknown preference key: {key}")
                 return None
@@ -1099,7 +1099,7 @@ class ShortsDownloaderBot:
                     logger.info(f"Periodic cleanup: Storage check result - {storage_result['action']}, usage: {storage_result['usage_human']}")
                 else:
                     # If storage threshold not reached, still do basic cleanup
-                    self.cleanup_temp_folder()
+                self.cleanup_temp_folder()
                     self.cleanup_processed_folder()
                 
                 # Sleep for 30 minutes
@@ -1241,10 +1241,10 @@ class ShortsDownloaderBot:
     def extract_video_info(self, url, retries=Config.RETRY_ATTEMPTS):
         """Extract video information with retries and exponential backoff."""
         for attempt in range(retries):
-            try:
+        try:
                 with yt_dlp.YoutubeDL({'quiet': True}) as ydl:
                     return ydl.extract_info(url, download=False)
-            except Exception as e:
+        except Exception as e:
                 logging.error(f"Error extracting info on attempt {attempt+1}: {e}")
                 if attempt < retries - 1:
                     # Exponential backoff
@@ -1877,7 +1877,7 @@ class ShortsDownloaderBot:
             except Exception as e:
                 logging.error(f"Error in YouTube handler: {e}")
                 self.bot.reply_to(message, "An error occurred while processing the video. Please try again.")
-                
+
         @self.bot.callback_query_handler(func=lambda call: True)
         def callback_wrapper(call):
             try:
@@ -1909,7 +1909,7 @@ class ShortsDownloaderBot:
                     else:
                         self.bot.answer_callback_query(call.id, "You are not authorized to use this feature", show_alert=True)
                 else:
-                    self.bot.answer_callback_query(call.id)
+                self.bot.answer_callback_query(call.id)
             except Exception as e:
                 logging.error(f"Callback error: {e}")
                 self.bot.answer_callback_query(
@@ -1975,7 +1975,7 @@ class ShortsDownloaderBot:
             result_msg = f"✅ Cleaning complete!\n\nRemoved: {removed_count} files\nFreed: {space_str}"
             
             markup = telebot.types.InlineKeyboardMarkup()
-            markup.row(
+        markup.row(
                 telebot.types.InlineKeyboardButton("↩️ Back", callback_data="admin_storage"),
                 telebot.types.InlineKeyboardButton("🏠 Admin Panel", callback_data="admin_panel")
             )
@@ -1984,9 +1984,9 @@ class ShortsDownloaderBot:
                 result_msg,
                 call.message.chat.id,
                 call.message.message_id,
-                reply_markup=markup
-            )
-            
+            reply_markup=markup
+        )
+
             logging.info(f"Manual cleanup completed: {removed_count} files removed, {space_str} freed")
         except Exception as e:
             error_msg = f"Error during manual cleanup: {e}"
@@ -2009,7 +2009,7 @@ class ShortsDownloaderBot:
         if message.from_user.id not in Config.ADMIN_IDS:
             self.bot.send_message(message.chat.id, "You are not authorized to use this feature")
             return
-            
+        
         try:
             self.bot.send_message(message.chat.id, "🔄 Restarting bot...")
             logging.info("Bot restart requested by admin")
@@ -2105,7 +2105,7 @@ class ShortsDownloaderBot:
                         os.remove(file_path)
                         removed_count += 1
                         freed_space += file_size
-                    except Exception as e:
+        except Exception as e:
                         logger.error(f"Failed to remove file {file_path}: {e}")
         
         return removed_count, freed_space

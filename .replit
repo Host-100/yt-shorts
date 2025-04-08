@@ -1,0 +1,9 @@
+run = "python cursor-short-yt.py"
+language = "python3"
+entrypoint = "cursor-short-yt.py"
+
+[nix]
+channel = "stable-22_11"
+
+[env]
+PYTHONPATH = "${PYTHONPATH}:${REPL_SLUG}" 
