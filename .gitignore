@@ -1,0 +1,31 @@
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environment (if used locally)
+env/
+venv/
+*.env
+.env
+.env.example
+shorts-venv/
+
+# Editor and IDE config files
+.vscode/
+*.code-workspace
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Log files and temp directories
+*.log
+temp_downloads/
+
+# Local sensitive/config data
+old-local/
+
+# Database and local storage files (if any)
+*.db

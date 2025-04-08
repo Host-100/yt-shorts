@@ -1,0 +1,16 @@
+# requirements.txt
+# Note: No versions specified. Installs the latest available compatible versions.
+# This may lead to unexpected behavior if future library updates introduce breaking changes.
+
+pyTelegramBotAPI==4.12.0
+python-telegram-bot==13.15
+yt-dlp==2023.3.4
+humanize==4.7.0
+google-api-python-client==2.86.0
+google-auth-httplib2==0.1.0
+google-auth-oauthlib==1.0.0
+Flask==2.3.2
+SQLAlchemy==2.0.16
+psycopg2-binary==2.9.6
+python-dotenv==1.0.0
+APScheduler==3.10.1
